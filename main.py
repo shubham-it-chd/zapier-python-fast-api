@@ -49,7 +49,7 @@ async def send_to_zapier():
 
 # ====================== ADD MCP SERVER (ZERO CONFIG) ======================
 mcp = FastApiMCP(
-    app=app,
+    app,
     name="Zapier MCP Server",
     description="Your existing FastAPI endpoints exposed as MCP tools for AI agents"
 )

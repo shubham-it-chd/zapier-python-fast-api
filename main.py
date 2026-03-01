@@ -4,10 +4,16 @@ import httpx
 from datetime import datetime
 from fastapi import FastAPI, Request
 
+# ====================== NEW: MCP IMPORT ======================
+from fastapi_mcp import FastApiMCP
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+app = FastAPI(
+    title="My MCP + Zapier Server",
+    description="REST API + MCP tools for AI agents (Claude, Cursor, etc.)"
+)
 
 @app.get("/")
 def main():
@@ -40,3 +46,12 @@ async def send_to_zapier():
         "zapier_status": response.status_code,
         "zapier_response": response.json() if response.headers.get("content-type", "").startswith("application/json") else response.text
     }
+
+# ====================== ADD MCP SERVER (ZERO CONFIG) ======================
+mcp = FastApiMCP(
+    app=app,
+    name="Zapier MCP Server",
+    description="Your existing FastAPI endpoints exposed as MCP tools for AI agents"
+)
+
+mcp.mount()   # This adds the /mcp endpoint automatically
